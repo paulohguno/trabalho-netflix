@@ -1,0 +1,24 @@
+{
+    "favorites.resources": [
+        {
+            "filePath": "src/models/modelsAutores.js",
+            "group": "Default"
+        },
+        {
+            "filePath": "src/models/modelsGenero.js",
+            "group": "Default"
+        },
+        {
+            "filePath": "src/models/modelsEpisodios.js",
+            "group": "Default"
+        },
+        {
+            "filePath": "src/models/modelsHistorico.js",
+            "group": "Default"
+        },
+        {
+            "filePath": "src/models/modelsPerfisUsuarios.js",
+            "group": "Default"
+        }
+    ]
+}

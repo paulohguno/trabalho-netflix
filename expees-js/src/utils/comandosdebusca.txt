@@ -1,0 +1,25 @@
+http://localhost:3333/episodios?id_temporada=5
+
+http://localhost:3333/historico/seriemaisassistida
+
+http://localhost:3333/dadosUsuarios/lancamentos/1
+
+busca - get
+
+
+//post
+http://localhost:3333/autenticacao/register
+{
+  "email": "teste@email.com",
+  "password": "123456789",
+  "nivelAcesso": "2"
+  //2 adm e 1 user
+}
+//post
+http://localhost:3333/autenticacao/login
+
+
+//get
+em autorhization colocar o token gerado no login
+http://localhost:3333/autenticacao/user
+no type coloque bearer type 

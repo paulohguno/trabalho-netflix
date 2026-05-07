@@ -1,0 +1,226 @@
+DOCUMENTAÇÃO: ROTA DE LOGIN (autenticacao)
+
+Objetivo
+--------
+Descrever o fluxo, contrato e exemplos para a rota de autenticação do sistema. Esta documentação explica como o frontend deve chamar o backend para fazer login, formatos de requisição e resposta, e como o token é armazenado.
+
+Resumo rápido
+-------------
+- Endpoint (backend): `POST /autenticacao/login`
+- Controller: `expees-js/src/controllers/controllerAutentic.js` -> função `login`
+- Modelo/Tabela: Sequelize model `Autentic` (tabela `autenticacao`) definido em `expees-js/src/models/modelsAutentic.js`
+
+Fluxo (alto nível)
+------------------
+1. Usuário preenche `email` e `password` na página de login (`components/ui/tela-login/iconeye.jsx`).
+2. Frontend envia um POST para `/autenticacao/login` com email e senha.
+3. Backend (controller `login`) valida entrada e procura o usuário na tabela `autenticacao`.
+4. Se encontrar, verifica se a senha corresponde (bcrypt.compare).
+5. Se senha correta, cria um token JWT com dados do usuário.
+6. Backend devolve o token.
+7. Frontend salva token em localStorage.
+8. Frontend redireciona para `/tela-principal`.
+
+Contrato da API
+---------------
+Request
+-------
+- URL: `POST /autenticacao/login`
+- Headers: `Content-Type: application/json`
+- Body (JSON):
+
+  {
+    "email": "usuario@exemplo.com",
+    "password": "senha123"
+  }
+
+Resposta (sucesso)
+-------------------
+Status: 200
+Body (exemplo):
+
+  {
+    "type": "success",
+    "message": "deu boa",
+    "data": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  }
+
+Explicação:
+- "data" contém o token JWT
+- O token expira em 8 horas (definido no backend)
+- O token armazena: idUsuario, emailUsuario, NivelDeAcesso
+
+Resposta (erro - email ou senha incorretos)
+------------------------------------------
+Status: 400
+Body (exemplo):
+
+  {
+    "type": "error",
+    "message": "email ou senha incorretos"
+  }
+
+Resposta (erro - campos vazios)
+-------------------------------
+Status: 400
+Body (exemplo):
+
+  {
+    "type": "error",
+    "message": "dados faltando"
+  }
+
+Resposta (erro servidor)
+------------------------
+Status: 500
+Body (exemplo):
+
+  {
+    "type": "error",
+    "message": "Ops! ocorreu um erro",
+    "data": "detalhe do erro"
+  }
+
+Exemplos de chamada
+-------------------
+cURL
+```
+curl -X POST "http://localhost:3333/autenticacao/login" \
+  -H "Content-Type: application/json" \
+  -d '{"email":"meu@exemplo.com","password":"senha123"}'
+```
+
+Axios (frontend)
+```js
+import { api } from '@/src/app/utils/api'
+
+const res = await api.post('/autenticacao/login', {
+  email: 'meu@exemplo.com',
+  password: 'senha123'
+})
+
+// guardar token
+localStorage.setItem('token', res.data.data)
+
+// redirecionar
+router.push('/tela-principal')
+```
+
+Usando o helper existente (arquivo `src/app/utils/api.js`)
+```js
+import { autenticacaoAPI } from '@/app/utils/api'
+
+const response = await autenticacaoAPI.login(email, password)
+
+if (response?.data?.type === 'success') {
+  localStorage.setItem('token', response.data.data)
+  // redirecionar
+}
+```
+
+Fetch nativo
+```js
+fetch('/autenticacao/login', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ email, password })
+})
+.then(r => r.json())
+.then(data => {
+  if (data.type === 'success') {
+    localStorage.setItem('token', data.data)
+  }
+})
+```
+
+Fluxo com token após login
+---------------------------
+1. Usuário faz login com sucesso
+2. Token é salvo em localStorage
+3. Middleware de request em api.js intercepta todas as próximas requisições
+4. Adiciona "Authorization: Bearer {token}" no header
+5. Backend valida o token e devolve dados protegidos
+
+Exemplo de header com token:
+```
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+Armazenamento do token
+---------------------
+- Local: localStorage (salvo no navegador)
+- Chave: "token"
+- Duração: até 8 horas
+- Removido quando: logout ou sessão expira
+
+Código de logout:
+```js
+localStorage.removeItem('token')
+// ou use autenticacaoAPI.logout()
+```
+
+Validação de token no backend
+-----------------------------
+- Arquivo: `expees-js/src/middlewares/verifyToken.js`
+- Função: `verifyToken` (middleware)
+- Operação: Valida se token é válido e não expirou
+- Se inválido: Retorna erro 401 Unauthorized
+
+Observações de segurança
+------------------------
+- Nunca exiba o token para o usuário
+- Token é criptografado com SECRET_KEY (variável de ambiente)
+- Sempre transmitir via HTTPS em produção
+- Token expira automaticamente (8 horas padrão)
+- Se receber 401 do backend, é porque token expirou ou é inválido
+
+Problemas conhecidos / troubleshooting
+------------------------------------
+- Resposta 400 com "email ou senha incorretos": dados de login estão errados
+- Resposta 400 com "dados faltando": email ou senha vazio
+- Resposta 401 em outras requisições após login: token expirou, fazer login novamente
+- Se localStorage está vazio: token não foi salvo, fazer login de novo
+
+Melhores práticas de implementação no frontend
+--------------------------------------------
+1. Validar localmente o email e senha antes de enviar (regex para email)
+2. Mostrar estados de carregamento (desabilitar botão e mostrar spinner)
+3. Salvar token em localStorage após sucesso
+4. Tratar erro 401 globalmente (redirecionar para login)
+5. Limpar token ao fazer logout
+6. Proteger rotas que precisam de autenticação
+
+Checklist rápido para integração
+--------------------------------
+- [ ] Verificar que `autenticacaoAPI.login` existe em `src/app/utils/api.js`
+- [ ] Implementar `handleLogin` que chama a API
+- [ ] Guardar token em localStorage quando sucesso
+- [ ] Redirecionar para `/tela-principal` após sucesso
+- [ ] Testar com backend em execução (porta correta)
+- [ ] Testar também com email/senha incorretos
+
+Fluxo completo: Registro → Login → Home
+---------------------------------------
+1. Usuário vai para /tela-register
+2. Preenche email e senha
+3. Clica "Continuar"
+4. Dados são salvos no banco via POST /autenticacao/register
+5. Redireciona para /tela-login
+6. Usuário preenche email e senha novamente
+7. Clica "Continuar"
+8. Backend valida credenciais via POST /autenticacao/login
+9. Retorna token JWT
+10. Token é salvo em localStorage
+11. Redireciona para /tela-principal
+12. Todas as próximas requisições incluem Authorization header com token
+
+Arquivos relevantes
+-------------------
+- Frontend: `front-teste/components/ui/tela-login/iconeye.jsx`
+- Frontend helper: `front-teste/src/app/utils/api.js`
+- Backend controller: `expees-js/src/controllers/controllerAutentic.js`
+- Backend routes: `expees-js/src/routes/routesAutentic.js`
+- Backend model: `expees-js/src/models/modelsAutentic.js`
+- Middleware verificador: `expees-js/src/middlewares/verifyToken.js`
+
+Se quiser, posso agora adicionar proteção de rotas no frontend para garantir que apenas usuários autenticados acessem a tela principal.

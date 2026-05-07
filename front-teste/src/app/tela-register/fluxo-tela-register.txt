@@ -1,0 +1,155 @@
+DOCUMENTAÇÃO: ROTA DE REGISTRO (autenticacao)
+
+Objetivo
+--------
+Descrever o fluxo, contrato e exemplos para a rota de criação de conta do sistema. Esta documentação explica como o frontend deve chamar o backend, formatos de requisição e resposta, e mapeamento para o banco de dados.
+
+Resumo rápido
+-------------
+- Endpoint (backend): `POST /autenticacao/register`
+- Controller: `expees-js/src/controllers/controllerAutentic.js` -> função `register`
+- Modelo/Tabela: Sequelize model `Autentic` (tabela `autenticacao`) definido em `expees-js/src/models/modelsAutentic.js`
+
+Fluxo (alto nível)
+------------------
+1. Usuário preenche `email` e `password` na página de registro (`src/app/tela-register/page.jsx`).
+2. Frontend envia um POST para `/autenticacao/register` com payload JSON.
+3. Backend (controller `register`) valida entrada e verifica se o email já existe.
+4. Se não existir, backend faz hash da senha com `bcrypt` e cria o registro via `Autentic.create`.
+5. Banco de dados persiste o registro (colunas: `email`, `password_hash`, `nivelAcesso`, timestamps).
+6. Backend responde com um objeto indicando sucesso ou erro.
+
+Contrato da API
+--------------
+Request
+-------
+- URL: `POST /autenticacao/register`
+- Headers: `Content-Type: application/json`
+- Body (JSON):
+
+	{
+		"email": "usuario@exemplo.com",
+		"password": "senha123",
+		"nivelAcesso": 1    // opcional — padrão é 1
+	}
+
+Resposta (sucesso)
+-------------------
+Status: 200
+Body (exemplo):
+
+	{
+		"type": "success",
+		"message": "deu boa",
+		"data": {
+			"id": 123,
+			"email": "usuario@exemplo.com",
+			"nivelAcesso": 1,
+			"created_at": "2026-05-04T..."
+		}
+	}
+
+Resposta (erro - email já existe)
+---------------------------------
+Status: 400
+Body (exemplo):
+
+	{
+		"type": "error",
+		"message": "ja existe!"
+	}
+
+Resposta (erro servidor)
+------------------------
+Status: 500
+Body (exemplo):
+
+	{
+		"type": "error",
+		"message": "Ops! ocorreu um erro",
+		"data": "detalhe do erro"
+	}
+
+Exemplos de chamada
+-------------------
+cURL
+```
+curl -X POST "http://localhost:3333/autenticacao/register" \
+	-H "Content-Type: application/json" \
+	-d '{"email":"meu@exemplo.com","password":"senha123"}'
+```
+
+Axios (frontend)
+```js
+import { api } from '@/src/app/utils/api' // use o client axios configurado
+
+const payload = { email: 'meu@exemplo.com', password: 'senha123', nivelAcesso: 1 }
+const res = await api.post('/autenticacao/register', payload)
+// tratar res.data conforme contrato acima
+```
+
+Usando o helper existente (arquivo `src/app/utils/api.js`)
+```js
+// em src/app/utils/api.js existe um export chamado autenticacaoAPI
+// garanta que o caminho esteja correto: importar como mostrado abaixo
+import { autenticacaoAPI } from '@/app/utils/api'
+
+const response = await autenticacaoAPI.registrar({ email, password, nivelAcesso: 1 })
+// verifique response.data.type === 'success'
+```
+
+Fetch nativo
+```js
+fetch('/autenticacao/register', {
+	method: 'POST',
+	headers: { 'Content-Type': 'application/json' },
+	body: JSON.stringify({ email, password })
+})
+.then(r => r.json())
+.then(data => console.log(data))
+```
+
+Mapeamento para o banco (Sequelize)
+-----------------------------------
+- Model: `Autentic` (arquivo `expees-js/src/models/modelsAutentic.js`)
+- Colunas relevantes:
+	- `email` (string, unique, not null)
+	- `password_hash` (string)
+	- `nivelAcesso` (int, default 1)
+	- `created_at` / `updated_at` (timestamps gerados pelo Sequelize)
+
+Observações de segurança
+------------------------
+- Nunca envie a senha em claro para armazenamento: o backend já usa `bcrypt.hash(password, 10)`.
+- Sempre transmitir via HTTPS em produção.
+- Validação adicional (recomendada): formato de email, força mínima de senha, proteção contra ataques de força bruta.
+
+Problemas conhecidos / troubleshooting
+------------------------------------
+- Rota incompatível: se o frontend estiver chamando `/autenticacao/registrar` (pt-BR) e o backend expõe `/autenticacao/register`, a chamada retornará 404. Ajuste um dos lados para igualar a rota. Recomenda-se alinhar o frontend para `/autenticacao/register`.
+- Resposta 400 com `ja existe!`: significa que o email já está cadastrado.
+- Resposta 500: verifique logs do backend (console/terminal) para detalhes do erro.
+
+Melhores práticas de implementação no frontend
+--------------------------------------------
+1. Validar localmente o email e a senha antes de enviar (regex para email, comprimento mínimo para senha).
+2. Mostrar estados de carregamento (desabilitar botão e mostrar spinner).
+3. Tratar mensagens do backend e mapeá-las para mensagens amigáveis ao usuário.
+4. Em sucesso, redirecionar para a tela de login ou autenticar automaticamente (se o backend retornar token).
+
+Checklist rápido para integração
+--------------------------------
+- [ ] Verificar rota em `src/app/utils/api.js` — deve referenciar `/autenticacao/register`.
+- [ ] Implementar `handleRegister` em `src/app/tela-register/page.jsx` usando `autenticacaoAPI.registrar`.
+- [ ] Validar inputs no frontend.
+- [ ] Testar fluxo com backend em execução (porta correta: ver `API_BASE_URL` em `src/app/utils/api.js`).
+
+Arquivos relevantes
+-------------------
+- Frontend: `front-teste/src/app/tela-register/page.jsx`
+- Frontend helper: `front-teste/src/app/utils/api.js`
+- Backend controller: `expees-js/src/controllers/controllerAutentic.js`
+- Backend routes: `expees-js/src/routes/routesAutentic.js`
+- Backend model: `expees-js/src/models/modelsAutentic.js`
+
+Se quiser, aplico agora as alterações no frontend (alinhando a rota em `src/app/utils/api.js`) e adiciono o `handleRegister` pronto em `src/app/tela-register/page.jsx` com feedback visual e redirecionamento.

@@ -1,0 +1,60 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-botao-confirmar: #db0000;
+  --color-texto-logos : #db0000;
+  --color-texto-pequeno : #564d4d;
+  --color-botao-informacao : #564d4d;
+  --color-botao-regreso: #831010;
+  --color-texto-regreso: #831010;
+  --color-texto-escuro: 	#000000;
+  --color-botao-escuro: 	#000000;
+  --color-texto-branco: #ffffff;
+  --color-botao-branco: #ffffff;
+  --color-fundo-telas: #2b0b0b;
+  --color-netflix-red: #E50914;
+  --color-netflix-red-dark: #C11119;
+  --color-cyan-400: #0CAFF0;
+  --color-cyan-2: #0CF09B;
+  --color-teal-1: #52F2ED;
+  --color-dark-020617: #020617;
+  --color-gray-383838: #383838;
+  --color-ccc: #cccccc;
+  --color-1a1a1a: #1a1a1a;
+}
+
+@layer base {
+  body {
+    @apply bg-black text-white font-sans;
+  }
+}
+
+@layer components {
+  .hero-gradient {
+    background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.7) 100%);
+  }
+}
+
+/* Global selection color */
+::selection {
+  background: var(--color-netflix-red);
+  color: var(--color-texto-branco);
+}
+
+@layer utilities {
+  .bg-netflix-red { background-color: var(--color-netflix-red); }
+  .hover\:bg-netflix-red-dark:hover { background-color: var(--color-netflix-red-dark); }
+  .bg-cyan { background-color: var(--color-cyan-400); }
+  .bg-cyan-2 { background-color: var(--color-cyan-2); }
+  .text-cyan { color: var(--color-cyan-400); }
+  .text-teal { color: var(--color-teal-1); }
+  .bg-dark-020617 { background-color: var(--color-dark-020617); }
+  .text-dark-020617 { color: var(--color-dark-020617); }
+  .bg-383 { background-color: var(--color-gray-383838); }
+  .text-ccc { color: var(--color-ccc); }
+  .bg-ccc { background-color: var(--color-ccc); }
+}

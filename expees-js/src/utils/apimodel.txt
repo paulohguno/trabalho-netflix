@@ -1,0 +1,22 @@
+{
+"adult": false,
+"backdrop_path": "/u53UYu5XG2hNgWGvs3xGhAVzypl.jpg",
+"genre_ids": [
+16,
+10751,
+878,
+35,
+12
+],
+"id": 1327819,
+"original_language": "en",
+"original_title": "Hoppers",
+"overview": "Mabel é uma jovem amante da natureza que tenta impedir o prefeito Jerry de construir uma rodovia que destruirá suas florestas locais. Graças a um experimento secreto de troca de cérebros, Mabel consegue transferir sua mente para um castor robô e segue para um lago, onde refugiados da industrialização invasora desembarcaram. Lá, ela tenta convencer os animais, liderados pelo castor majestoso Rei George, a se juntarem a ela e impedirem a construção da rodovia.",
+"popularity": 278.3993,
+"poster_path": "/ftPFJBGbldoWiiPrmesW96zBzdH.jpg",
+"release_date": "2026-03-04",
+"title": "Cara de Um, Focinho de Outro",
+"video": false,
+"vote_average": 7.584,
+"vote_count": 461
+},

@@ -1,0 +1,13 @@
+// src/app.js
+require('dotenv').config();
+const express = require('express');
+const movieRoutes = require('./routes/movie.routes');
+
+const app = express();
+
+app.use(express.json());
+app.use('/movies', movieRoutes);
+
+app.listen(3001, () => {
+    console.log('Servidor rodando na porta 3001');
+});

@@ -1,0 +1,169 @@
+-- 1. Planos
+INSERT INTO Planos (nivel_plano, quantidade_telas, valor_plano, Plano_ativo, created_at, updated_at) VALUES
+(1, 1, 24.90, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(1, 1, 24.90, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 2, 39.90, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 2, 39.90, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 4, 55.90, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 4, 55.90, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(1, 1, 24.90, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 2, 39.90, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 4, 55.90, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 4, 55.90, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO autenticacao
+(email, password_hash, created_at, updated_at) VALUES
+('user1@email.com', '$2b$10$hashsenha1', 1, NOW(), NOW()),
+('user2@email.com', '$2b$10$hashsenha2', 2, NOW(), NOW()),
+('user3@email.com', '$2b$10$hashsenha3', 3, NOW(), NOW()),
+('user4@email.com', '$2b$10$hashsenha4', 4, NOW(), NOW()),
+('user5@email.com', '$2b$10$hashsenha5', 5, NOW(), NOW()),
+('user6@email.com', '$2b$10$hashsenha6', 6, NOW(), NOW()),
+('user7@email.com', '$2b$10$hashsenha7', 7, NOW(), NOW()),
+('user8@email.com', '$2b$10$hashsenha8', 8, NOW(), NOW()),
+('user9@email.com', '$2b$10$hashsenha9', 9, NOW(), NOW()),
+('user10@email.com', '$2b$10$hashsenha10', 10, NOW(), NOW());
+
+-- 2. Dados de Usuários
+INSERT INTO dados_usuarios (nome, cpf, status_da_conta, data_pagamento, localizacao, id_plano_usuario, created_at, updated_at) VALUES
+('Maria Oliveira', '23456789011', true, '2026-04-01', 'São Paulo - SP', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Carlos Souza', '34567890122', true, '2026-04-02', 'Rio de Janeiro - RJ', 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Ana Costa', '45678901233', true, '2026-04-03', 'Belo Horizonte - MG', 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Pedro Santos', '56789012344', true, '2026-04-04', 'Curitiba - PR', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Julia Lima', '67890123455', false, '2026-03-05', 'Porto Alegre - RS', 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Marcos Rocha', '78901234566', true, '2026-04-06', 'Salvador - BA', 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Fernanda Alves', '89012345677', true, '2026-04-07', 'Brasília - DF', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Roberto Dias', '90123456788', true, '2026-04-08', 'Fortaleza - CE', 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Luciana Melo', '01234567899', true, '2026-04-09', 'Manaus - AM', 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Ricardo Gomes', '11223344556', true, '2026-04-10', 'Chapecó - SC', 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- 3. Perfis de Usuários
+INSERT INTO perfis_usuarios (nome, id_dados_usuario, infantil, created_at, updated_at) VALUES
+('Mariazinha', 1, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Carlão', 2, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Aninha', 3, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Pedrinho', 4, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Ju', 5, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Marcão', 6, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Fê', 7, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Beto', 8, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Lu', 9, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Rick', 10, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+
+-- 4. Autores
+INSERT INTO autores (nome, created_at, updated_at) VALUES
+('Vince Gilligan', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('J.R.R. Tolkien', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Steven Knight', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Hwang Dong-hyuk', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('The Duffer Brothers', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Charlie Brooker', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Craig Mazin', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Peter Morgan', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Jesse Armstrong', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Taylor Sheridan', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- 5. Gênero
+INSERT INTO genero (Genero, created_at, updated_at) VALUES
+('Drama', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Ação', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Sci-Fi', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Terror', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Comédia', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Documentário', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Suspense', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Aventura', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Crime', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Mistério', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- 6. Sinopse
+INSERT INTO sinopse (data_lancamento, informacoes, nome, created_at, updated_at) VALUES
+('2008-01-20', 'Um professor de química se torna traficante.', 'Breaking Bad', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('2013-09-12', 'Gangues de Birmingham em 1919.', 'Peaky Blinders', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('2016-07-15', 'Garoto desaparece em cidade com eventos sobrenaturais.', 'Stranger Things', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('2011-12-04', 'Contos sombrios sobre a tecnologia moderna.', 'Black Mirror', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('2021-09-17', 'Pessoas endividadas jogam jogos mortais por dinheiro.', 'Round 6', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('2019-05-06', 'A história do desastre nuclear de 1986.', 'Chernobyl', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('2016-11-04', 'A vida da Rainha Elizabeth II.', 'The Crown', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('2018-06-03', 'A disputa por um império de mídia.', 'Succession', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('2023-01-15', 'Sobrevivência em um mundo pós-apocalíptico.', 'The Last of Us', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('2018-06-20', 'Uma família de fazendeiros luta por suas terras.', 'Yellowstone', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+-- 7. Temporada
+INSERT INTO temporada (numero_episodios, Id_series, created_at, updated_at) VALUES
+(7, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(6, 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(8, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(9, 6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(5, 7, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(10, 8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(10, 9, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(9, 10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(10, 11, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- 8. Episódios
+INSERT INTO episodios (titulo, id_temporada, created_at, updated_at) VALUES
+('Pilot (Breaking Bad)', 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Episode 1 (Peaky Blinders)', 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('The Vanishing of Will Byers', 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('The National Anthem', 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Red Light, Green Light', 6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('1:23:45 (Chernobyl)', 7, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Wolferton Splash', 8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Celebration', 9, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('When You Are Lost in the Darkness', 10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Daybreak', 11, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- 9. Histórico
+INSERT INTO historico (episodio_assistido, tempo_assistido, temporada, id_perfil_usuario, id_sinopse, created_at, updated_at) VALUES
+(1, '00:58:00', 1, 2, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(1, '00:55:00', 1, 3, 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(1, '00:48:00', 1, 4, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(1, '01:02:00', 1, 5, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(1, '00:50:00', 1, 6, 6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(1, '01:05:00', 1, 7, 7, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(1, '00:59:00', 1, 8, 8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(1, '00:57:00', 1, 9, 9, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(1, '01:20:00', 1, 10, 10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(1, '00:45:00', 1, 1, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- 10. Sinopse Autores
+INSERT INTO sinopse_autores (id_sinopse, id_autor, created_at, updated_at) VALUES
+(2, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(4, 6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(5, 7, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(6, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(7, 8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(8, 9, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(9, 10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(10, 8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- 11. Sinopse Gêneros
+INSERT INTO sinopse_generos (id_sinopse, id_genero, created_at, updated_at) VALUES
+(2, 9, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(4, 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(5, 7, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(6, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(7, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(8, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(9, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(10, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- 12. Sinopse Temporadas
+INSERT INTO sinopse_temporadas (id_sinopse, id_temporada, created_at, updated_at) VALUES
+(2, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(4, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(5, 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(6, 6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(7, 7, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(8, 8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(9, 9, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(10, 10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 11, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+

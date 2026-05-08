@@ -6,7 +6,9 @@ export default (app) => {
     app.get('/sinopse/getapi', sinopseController.BuscarNomeApi);
     app.get('/sinopse/getapi/:nome', sinopseController.BuscarNomeApi);
     app.post('/sinopse/getapi', sinopseController.BuscarNomeApi);
+    app.get('/sinopse/buscar', sinopseController.BuscarPorNome);
     app.get('/sinopse/popular', sinopseController.BuscarPopulares);
+    app.get('/sinopse/genero/:id', sinopseController.BuscarPorGenero);
     app.get('/sinopse/top-rated', sinopseController.BuscarTopRated);
     app.get('/sinopse/upcoming', sinopseController.BuscarUpcoming);
     app.get('/sinopse/trending', sinopseController.BuscarTrending);

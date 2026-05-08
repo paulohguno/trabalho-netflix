@@ -1,9 +1,35 @@
 'use client'
 import { useState } from 'react'
 import { FaSearch } from "react-icons/fa";
+import { useRouter } from 'next/navigation'
+
+
+
+
+
+
 
 
 export default function HeaderPrincipal() {
+
+const router = useRouter()
+
+
+
+
+const TelaPesquisa = async () => {
+    try {
+        router.push('/tela-pesquisa')
+
+    }catch (error) {
+            const mensagem = error?.response?.data?.message || error.message || 'Erro de conexão'
+            alert(mensagem)
+            console.error('Erro ao fazer login:', error)
+    }
+
+}
+
+
     return (
         <header className="fixed top-0 w-full bg-black/30 backdrop-blur-xl z-50 py-4 px-4 md:px-8">
             <div className="max-w-6xl mx-auto flex items-center justify-between">
@@ -12,7 +38,10 @@ export default function HeaderPrincipal() {
                 </div>
                 <div>
                     <nav className="hidden md:flex gap-8 text-gray-300">
-                        <button className="transition-all duration-300 hover:scale-110 hover:text-texto-logos">
+                        <button className="transition-all duration-300 hover:scale-110 hover:text-texto-logos"
+                        onClick={TelaPesquisa}
+                        >
+                            
                             <FaSearch />
                         </button>
                         <span className="transition-all duration-300 hover:scale-110 hover:text-texto-logos">Inicio</span>

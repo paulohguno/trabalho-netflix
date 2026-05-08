@@ -83,6 +83,48 @@ const BuscarNomeApi = async (req, res) => {
     }
 };
 
+const BuscarPorNome = async (req, res) => {
+    try {
+        const nome = (req.query.nome || req.params.nome || '').trim();
+        const page = Number(req.query.page) || 1;
+
+        if (!nome) {
+            return res.status(400).send({
+                type: 'error',
+                message: 'nome e obrigatorio',
+                data: []
+            });
+        }
+
+        const tmdb = await chaveApi(`/search/movie?query=${encodeURIComponent(nome)}&language=pt-BR&page=${page}`);
+        const items = Array.isArray(tmdb.results) ? tmdb.results : [];
+        const downloaded = await downloadImagesFromTmdb(items);
+
+        const host = (process.env.API_HOST || `http://localhost:${process.env.API_PORT || 3333}`).replace(/\/$/, '');
+
+        const mapped = items.map((it) => {
+            const dl = downloaded.find(d => d.id === it.id);
+            const localPoster = dl && dl.localPoster ? `${host}/media/${dl.localPoster}` : null;
+            return {
+                ...it,
+                local_poster: localPoster
+            };
+        });
+
+        return res.status(200).send({
+            type: 'success',
+            message: 'filmes encontrados por nome',
+            data: { ...tmdb, results: mapped }
+        });
+    } catch (error) {
+        return res.status(500).send({
+            type: 'error',
+            message: 'erro de servidor',
+            data: error.message,
+        });
+    }
+};
+
 const BuscarPopulares = async (req, res) => {
     try {
         const page = Number(req.query.page) || 1;
@@ -106,6 +148,49 @@ const BuscarPopulares = async (req, res) => {
         return res.status(200).send({
             type: 'sucess',
             message: 'filmes populares TMDB retornados',
+            data: { ...tmdb, results: mapped }
+        });
+    } catch (error) {
+        return res.status(500).send({
+            type: 'error',
+            message: 'erro de servidor',
+            data: error.message,
+        });
+    }
+};
+
+const BuscarPorGenero = async (req, res) => {
+    try {
+        const page = Number(req.query.page) || 1;
+        const generoId = Number(req.params.id || req.query.genero);
+
+        if (!Number.isInteger(generoId) || generoId <= 0) {
+            return res.status(400).send({
+                type: 'error',
+                message: 'genero invalido',
+                data: []
+            });
+        }
+
+        const tmdb = await chaveApi(`/discover/movie?language=pt-BR&page=${page}&with_genres=${generoId}`);
+
+        const items = Array.isArray(tmdb.results) ? tmdb.results : [];
+        const downloaded = await downloadImagesFromTmdb(items);
+
+        const host = (process.env.API_HOST || `http://localhost:${process.env.API_PORT || 3333}`).replace(/\/$/, '');
+
+        const mapped = items.map((it) => {
+            const dl = downloaded.find(d => d.id === it.id);
+            const localPoster = dl && dl.localPoster ? `${host}/media/${dl.localPoster}` : null;
+            return {
+                ...it,
+                local_poster: localPoster
+            };
+        });
+
+        return res.status(200).send({
+            type: 'success',
+            message: 'filmes por genero TMDB retornados',
             data: { ...tmdb, results: mapped }
         });
     } catch (error) {
@@ -438,7 +523,9 @@ const BuscarTrending = async (req, res) => {
 
 export default {
     BuscarNomeApi,
+    BuscarPorNome,
     BuscarPopulares,
+    BuscarPorGenero,
     BuscarTopRated,
     BuscarUpcoming,
     BuscarTrending,
